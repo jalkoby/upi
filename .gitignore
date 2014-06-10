@@ -1,0 +1,4 @@
+/uploads/
+/.godeps/
+/gin-bin
+/.envrc

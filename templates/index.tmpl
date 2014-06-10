@@ -1,0 +1,54 @@
+<div class="pure-u-7-8">
+  <table class="pure-table pure-table-horizontal pure-table-jumbotron">
+    <col width="60%" />
+    <col width="15%" />
+    <col width="15%" />
+    <col width="10%" />
+    <thead>
+      <tr>
+        <th>Project</th>
+        <th>Storage</th>
+        <th>Files</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ range . }}
+        <tr>
+          <td>
+            <a href="/files/{{ .Token }}" data-token class="info-link">{{ .Name }}</a>
+          </td>
+          <td>{{ .Storage }}</td>
+          <td>{{ .FilesCount }}</td>
+          <td><a href="/projects/{{ .Token }}" data-method="delete"><i class="fa fa-2x fa-trash-o"></i></a></td>
+        </tr>
+      {{ end }}
+    </tbody>
+  </table>
+
+  <form class="pure-form" method="POST" action="/projects">
+    <fieldset>
+      <legend>Add new project</legend>
+      <input name="name" placeholder="Project name">
+      <select name="storage" class="pure-input-1-4">
+        <option value="">Select Storage</option>
+        <option value="local">Local hosting</option>
+        <option value="s3">Amazon S3</option>
+      </select>
+      <input type="submit" value="Add" class="pure-button pure-button-primary"/>
+    </fieldset>
+  </form>
+
+  <ul id="preview" class="api-endpoint" hidden>
+    <li><strong>INFO:</strong> Uploading file</li>
+    <li><strong>URL:</strong> <span id="link"></span></li>
+    <li><strong>METHOD:</strong> POST</li>
+    <li><strong>RESULT:</strong>%FILE_URL%</li>
+    <li>
+      <strong>PARAMS:</strong>
+      <ul>
+        <li><span>file</span> - uploaded file</li>
+      </ul>
+    </li>
+  </ul>
+</div>

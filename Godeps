@@ -1,0 +1,5 @@
+github.com/codegangsta/inject v1.0-rc1 
+github.com/martini-contrib/render c8d058a00a82f27bfc8a49d62525b7c60efcf5b8 
+github.com/go-martini/martini v1.0 
+github.com/rlmcpherson/s3gof3r v0.3.2 
+labix.org/v2/mgo r2014.03.12 
