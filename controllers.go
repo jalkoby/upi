@@ -37,35 +37,22 @@ func (_ ProjectsCtrl) Destroy(params martini.Params, res http.ResponseWriter) (i
 
 type FilesCtrl struct {}
 
-
-func (_ FilesCtrl) Show(params martini.Params) (int, string) {
-  return 200, params["id"]
-}
-
 func (_ FilesCtrl) Create(params martini.Params, r *http.Request) (int, string) {
   project, err := FindProject(params["projectId"])
   if err != nil { return 404, "not found project" }
 
   err = r.ParseMultipartForm(1000000)
-  if err != nil { return 422, "" }
+  if err != nil { return 422, "problem with file parsing" }
 
   fhs := r.MultipartForm.File["file"]
-  if len(fhs) == 0 { return 422, "" }
+  if len(fhs) == 0 { return 422, "there is not attached file" }
 
   file, err := fhs[0].Open()
   defer file.Close()
-  if err != nil { return 422, "" }
+  if err != nil { return 422, "could not open file" }
 
-  projectToken := project.Token()
-  id, err := project.GetFileName()
-  if err != nil { return 500, "" }
+  url, err := Upload(file, project)
+  if err != nil { return 500, "problem with file storing" }
 
-  if project.IsLocal() {
-    err = LocalUpload(file, projectToken, id)
-  } else {
-    err = S3Upload(file, projectToken, id)
-  }
-
-  if err != nil { return 500, "" }
-  return 200, "/files/" + projectToken + "/" + id
+  return 201, url
 }
