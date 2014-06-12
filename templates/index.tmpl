@@ -43,11 +43,17 @@
     <li><strong>INFO:</strong> Uploading file</li>
     <li><strong>URL:</strong> <span id="link"></span></li>
     <li><strong>METHOD:</strong> POST</li>
-    <li><strong>RESULT:</strong>%FILE_URL%</li>
     <li>
       <strong>PARAMS:</strong>
       <ul>
-        <li><span>file</span> - uploaded file</li>
+        <li><span>file</span>: a file content in multipart/form-date format</li>
+      </ul>
+    </li>
+    <li>
+      <strong>RESULT:</strong>
+      <ul>
+        <li><span>Success(201)</span>: %FILE_URL%</li>
+        <li><span>Fail(404, 422, 500)</span>: %ERROR_MESSAGE%</li>
       </ul>
     </li>
   </ul>
