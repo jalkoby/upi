@@ -1,11 +1,12 @@
 package main
 
 import (
-  "github.com/go-martini/martini"
+  "github.com/jalkoby/martini"
   "github.com/martini-contrib/render"
   "github.com/martini-contrib/auth"
   "os"
   "log"
+  "path/filepath"
 )
 
 func main() {
@@ -14,8 +15,8 @@ func main() {
 
   app.Use(martini.Recovery())
   app.Use(martini.Logger())
-  app.Use(martini.Static("assets", martini.StaticOptions{Prefix: "assets"}))
-  app.Use(martini.Static("uploads"))
+  app.Use(martini.Static("assets", martini.StaticOptions{Prefix: "assets", }))
+  app.Use(martini.Static("uploads", martini.StaticOptions{Prefix: "files"}))
 
   r := martini.NewRouter()
 
@@ -31,7 +32,7 @@ func main() {
 
     r.Post("/projects", ctrl.Create)
     r.Delete("/projects/:id", ctrl.Destroy)
-  }, render.Renderer(render.Options{Layout: "layout"}), auth.Basic("admin", password))
+  }, render.Renderer(render.Options{Directory: filepath.Join(martini.Root, "templates"), Layout: "layout"}), auth.Basic("admin", password))
 
   app.Action(r.Handle)
   app.Run()

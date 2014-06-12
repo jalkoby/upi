@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
           }
           xhr.open(link.dataset["method"], link.href, true);
+          xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
           xhr.send();
         });
       })(links[i]);

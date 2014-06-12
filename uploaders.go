@@ -52,7 +52,7 @@ func localUpload(file multipart.File, token string, id string) (string, error) {
   _, err = io.Copy(dst, file)
   if err != nil { return "", err }
 
-  url := fmt.Sprintf("%v/%v/%v", configs["localHost"], token, id)
+  url := fmt.Sprintf("%v/files/%v/%v", configs["localHost"], token, id)
   return url, nil
 }
 

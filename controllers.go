@@ -2,7 +2,7 @@ package main
 
 import (
   "net/http"
-  "github.com/go-martini/martini"
+  "github.com/jalkoby/martini"
   "github.com/martini-contrib/render"
   "time"
 )
