@@ -6,9 +6,9 @@ require 'mina/git'
 #   repository   - Git repo to clone from. (needed by mina/git)
 #   branch       - Branch name to deploy. (needed by mina/git)
 
-set :domain, 'clipsafe'
+set :domain, ENV["MINA_DOMAIN"]
 set :deploy_to, '/var/www/upi'
-set :repository, 'git@gitlab.innomos.com:root/upi.git'
+set :repository, ENV["MINA_GIT"]
 set :branch, 'master'
 
 # They will be linked in the 'deploy:link_shared_paths' step.
