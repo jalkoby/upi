@@ -4,14 +4,18 @@ import (
   "net/http"
   "github.com/go-martini/martini"
   "github.com/martini-contrib/render"
+  "time"
 )
+
+var assetToken = time.Now().Unix()
 
 type ProjectsCtrl struct {}
 
 func (_ ProjectsCtrl) Index(r render.Render) {
   projects, err := AllProjects()
   if err == nil {
-    r.HTML(200, "index", projects)
+    bindings := map[string]interface{}{"projects": projects, "assetToken": assetToken}
+    r.HTML(200, "index", bindings)
   } else {
     r.HTML(500, "error", nil)
   }
