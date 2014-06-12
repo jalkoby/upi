@@ -58,7 +58,7 @@ task :deploy do
     invoke :'app:compile'
 
     to :launch do
-      queue! %[echo $(date) > #{deploy_to}/tmp/deploy]
+      queue! %[touch #{deploy_to}/tmp/restart.txt]
     end
   end
 end
