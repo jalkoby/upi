@@ -15,6 +15,7 @@ func main() {
   app.Use(martini.Recovery())
   app.Use(martini.Logger())
   app.Use(martini.Static("assets", martini.StaticOptions{Prefix: "assets"}))
+  app.Use(martini.Static("uploads"))
 
   r := martini.NewRouter()
 
