@@ -1,9 +1,10 @@
 package main
 
 import (
-  "net/http"
+  "encoding/json"
   "github.com/jalkoby/martini"
   "github.com/martini-contrib/render"
+  "net/http"
   "time"
 )
 
@@ -48,15 +49,19 @@ func (_ FilesCtrl) Create(params martini.Params, r *http.Request) (int, string) 
   err = r.ParseMultipartForm(1000000)
   if err != nil { return 422, "problem with file parsing" }
 
-  fhs := r.MultipartForm.File["file"]
-  if len(fhs) == 0 { return 422, "there is not attached file" }
+  debugLog("form values", r.MultipartForm.Value)
 
-  file, err := fhs[0].Open()
-  defer file.Close()
-  if err != nil { return 422, "could not open file" }
+  urls := map[string]string{}
+  for paramName, fs := range r.MultipartForm.File {
+    file, err := fs[0].Open()
+    if err != nil { return 422, "could not open file" }
+    defer file.Close()
 
-  url, err := Upload(file, project)
-  if err != nil { return 500, "problem with file storing" }
+    url, err := Upload(file, project)
+    if err != nil { return 500, "problem with file storing" }
+    urls[paramName] = url
+  }
 
-  return 201, url
+  jsonUrls, _ := json.Marshal(urls)
+  return 201, string(jsonUrls)
 }

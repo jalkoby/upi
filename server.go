@@ -1,12 +1,12 @@
 package main
 
 import (
-  "github.com/jalkoby/martini"
   "github.com/martini-contrib/render"
   "github.com/martini-contrib/auth"
   "os"
   "log"
   "path/filepath"
+  "github.com/jalkoby/martini"
 )
 
 func main() {
@@ -38,6 +38,6 @@ func main() {
   app.Run()
 }
 
-func debugLog(str string) {
-  log.Println(str)
+func debugLog(key interface{}, item interface{}) {
+  log.Printf("%v\n", item)
 }
