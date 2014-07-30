@@ -43,7 +43,7 @@ func (_ ProjectsCtrl) Destroy(params martini.Params, res http.ResponseWriter) (i
 type FilesCtrl struct {}
 
 func (_ FilesCtrl) Create(params martini.Params, r *http.Request, w http.ResponseWriter) (int, string) {
-  project, err := FindProject(params["projectId"])
+  project, err := FindProject(params["id"])
   if err != nil { return 404, "not found project" }
 
   err = r.ParseMultipartForm(1000000)
@@ -65,4 +65,11 @@ func (_ FilesCtrl) Create(params martini.Params, r *http.Request, w http.Respons
   jsonUrls, _ := json.Marshal(urls)
   w.Header().Set("Content-Type", "application/json")
   return 201, string(jsonUrls)
+}
+
+func (_ FilesCtrl) Version(params martini.Params, w http.ResponseWriter) (int, string) {
+  file, err := FindFileWithProject(params["id"])
+  if err != nil { return 404, "not found file" }
+  w.Write(Version(file, params["dimention"]))
+  return 200, string(file.Id)
 }

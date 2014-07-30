@@ -17,6 +17,7 @@ type Project struct {
 type File struct {
   Id bson.ObjectId `bson:"_id,omitempty"`
   ProjectId bson.ObjectId `bson:"project_id,omitempty"`
+  Project Project
 }
 
 func init() {
@@ -59,12 +60,33 @@ func CreateProject(name string, storage string) (err error) {
   return err
 }
 
-func FindProject(id string) (project Project, err error) {
+func FindProject(_id interface{}) (project Project, err error) {
   c, err := getCollection("projects")
   if err != nil { return project, err }
   defer c.Database.Session.Close()
-  err = c.FindId(bson.ObjectIdHex(id)).One(&project)
+  var id bson.ObjectId
+
+  switch _id.(type) {
+    case bson.ObjectId:
+      id = _id.(bson.ObjectId)
+    case string:
+      id = bson.ObjectIdHex(_id.(string))
+    default:
+      return project, errors.New("invalid id type")
+  }
+  err = c.FindId(id).One(&project)
   return project, err
+}
+
+func FindFileWithProject(id string) (file File, err error) {
+  c, err := getCollection("files")
+  if err != nil { return file, err }
+  defer c.Database.Session.Close()
+  err = c.FindId(bson.ObjectIdHex(id)).One(&file)
+  if err != nil { return file, err }
+  project, err := FindProject(file.ProjectId)
+  file.Project = project
+  return file, err
 }
 
 func DestroyProject(id string) (err error) {
@@ -98,6 +120,10 @@ func (p Project) FilesCount() int {
 
 func (p Project) Token() string {
   return p.Id.Hex()
+}
+
+func (f File) Token() string {
+  return f.Id.Hex()
 }
 
 func getCollection(name string) (c *mgo.Collection, err error) {

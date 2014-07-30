@@ -20,7 +20,11 @@ func main() {
 
   r := martini.NewRouter()
 
-  r.Post("/files/:projectId", new(FilesCtrl).Create)
+  r.Group("/files/:id", func(r martini.Router) {
+    ctrl := new(FilesCtrl)
+    r.Post("", ctrl.Create)
+    r.Get("/:dimention", ctrl.Version)
+  })
 
   password := os.Getenv("UPI_PASSWORD")
   if len(password) < 6 {
@@ -39,5 +43,5 @@ func main() {
 }
 
 func debugLog(key interface{}, item interface{}) {
-  log.Printf("%v\n", item)
+  log.Printf("%v: %v\n", key, item)
 }
